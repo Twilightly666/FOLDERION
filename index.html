@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FOLDERION</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="titlebar pywebview-drag-region">
+    <span class="title pywebview-drag-region">FOLDERION</span>
+    <div class="controls">
+        <button id="btn-min" title="Згорнути">
+            <svg viewBox="0 0 12 12"><path d="M2 6h8"/></svg>
+        </button>
+        <button id="btn-max" title="Масштабувати">
+            <svg viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8"/></svg>
+        </button>
+        <button id="btn-close" class="close" title="Закрити">
+            <svg viewBox="0 0 12 12"><path d="M2 2l8 8M10 2l-8 8"/></svg>
+        </button>
+    </div>
+</header>
+<main>
+    <nav class="tabs" id="tabs">
+        <div class="tab active">
+            <span class="tab-label">Робочий стіл</span>
+            <span class="tab-close" title="Закрити вкладку">
+                <svg viewBox="0 0 12 12"><path d="M3 3l6 6M9 3l-6 6"/></svg>
+            </span>
+        </div>
+        <button class="tab-add" id="add-tab" title="Нова вкладка">
+            <svg viewBox="0 0 12 12"><path d="M6 2v8M2 6h8"/></svg>
+        </button>
+        <button class="ed-toggle" id="ed-toggle" type="button" title="Показати редактор">
+            <svg class="et-icon" viewBox="0 0 16 16"><path d="M6 4.5L2.5 8 6 11.5M10 4.5L13.5 8 10 11.5"/></svg>
+            <span>Редактор</span>
+            <svg class="et-chev et-down" viewBox="0 0 12 12"><path d="M2.5 4.5l3.5 3.5 3.5-3.5"/></svg>
+            <svg class="et-chev et-up" viewBox="0 0 12 12"><path d="M2.5 7.5L6 4l3.5 3.5"/></svg>
+        </button>
+    </nav>
+    <div class="toolbar">
+        <button class="nav-btn" id="btn-back" title="Назад" disabled>
+            <svg viewBox="0 0 12 12"><path d="M7.5 2L3.5 6l4 4"/></svg>
+        </button>
+        <button class="nav-btn" id="btn-forward" title="Вперед" disabled>
+            <svg viewBox="0 0 12 12"><path d="M4.5 2l4 4-4 4"/></svg>
+        </button>
+        <button class="nav-btn" id="btn-up" title="Вгору">
+            <svg viewBox="0 0 12 12"><path d="M2 7.5l4-4 4 4"/></svg>
+        </button>
+        <input class="field address" id="address" type="text" placeholder="Адреса" spellcheck="false">
+        <input class="field search" id="search" type="text" placeholder="Пошук" spellcheck="false">
+        <div class="view-wrap">
+            <button class="nav-btn view-btn" id="btn-view" title="Вигляд"></button>
+            <div class="view-menu" id="view-menu" hidden>
+                <div class="view-item" data-view="list"><span class="vi"></span><span class="vl">Список</span><span class="vc"></span></div>
+                <div class="view-item" data-view="gallery"><span class="vi"></span><span class="vl">Галерея</span><span class="vc"></span></div>
+                <div class="view-item" data-view="table"><span class="vi"></span><span class="vl">Таблиця</span><span class="vc"></span></div>
+            </div>
+        </div>
+        <button class="nav-btn" id="btn-hidden" title="Приховані файли"></button>
+    </div>
+    <div class="body-row" id="body-row">
+        <aside class="sidebar">
+            <div class="side-group">
+                <div class="side-item active" data-place="desktop">Робочий стіл</div>
+                <div class="side-item" data-place="pc">Цей пк</div>
+                <div class="side-item" data-place="trash">Смітник</div>
+                <div class="side-item" data-place="help">Довідник</div>
+            </div>
+            <div class="side-group">
+                <div class="side-item" data-place="downloads">Завантаження</div>
+                <div class="side-item" data-place="documents">Документи</div>
+                <div class="side-item" data-place="pictures">Зображення</div>
+                <div class="side-item" data-place="music">Музика</div>
+                <div class="side-item" data-place="videos">Відеозаписи</div>
+            </div>
+            <div class="side-group pinned" id="pinned"></div>
+        </aside>
+        <section class="content" id="content"></section>
+        <aside class="editor" id="editor" hidden>
+            <div class="ed-head">
+                <div class="ed-tabs" id="ed-tabs"></div>
+                <button class="ed-eye" id="ed-preview-btn" type="button" title="Попередній перегляд" hidden>
+                    <svg viewBox="0 0 16 16"><path d="M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8zM6 8a2 2 0 1 0 4 0 2 2 0 1 0-4 0"/></svg>
+                </button>
+                <button class="ed-btn" id="ed-save" type="button" title="Зберегти (Ctrl+S)" disabled>Зберегти</button>
+                <button class="ed-btn" id="ed-save-all" type="button" title="Зберегти всі файли (Ctrl+Shift+S)" disabled hidden>Зберегти все</button>
+            </div>
+            <div class="ed-empty">Немає відкритих файлів. Двічі клікніть по текстовому файлу, щоб відкрити його тут.</div>
+            <div class="ed-body">
+                <pre class="ed-gutter" id="ed-gutter" aria-hidden="true">1</pre>
+                <div class="ed-wrap plain" id="ed-wrap">
+                    <pre class="ed-code" id="ed-code" aria-hidden="true"></pre>
+                    <textarea class="ed-text" id="ed-text" spellcheck="false" wrap="off" autocomplete="off"></textarea>
+                </div>
+            </div>
+            <div class="ed-preview" id="ed-preview"></div>
+            <div class="ed-foot">
+                <span id="ed-pos">Рядок 1, стовпець 1</span>
+                <span id="ed-info"></span>
+            </div>
+        </aside>
+        <aside class="viewer" id="viewer" hidden>
+            <div class="vw-head">
+                <span class="vw-title" id="vw-title"></span>
+                <button class="vw-btn" id="vw-close" title="Закрити перегляд"></button>
+            </div>
+            <div class="vw-stage" id="vw-stage">
+                <img id="vw-img" alt="" draggable="false">
+                <video id="vw-video" disablePictureInPicture playsinline preload="metadata"></video>
+                <div class="vw-msg" id="vw-msg" hidden></div>
+            </div>
+            <div class="vw-foot" id="vw-foot">
+                <div class="vw-bar" id="vw-bar" hidden>
+                    <button class="pl-btn" id="vb-play" title="Відтворити"><svg viewBox="0 0 12 12"></svg></button>
+                    <span class="pl-time" id="vb-cur">0:00</span>
+                    <input class="pl-range pl-seek" id="vb-seek" type="range" min="0" max="1000" value="0">
+                    <span class="pl-time" id="vb-dur">0:00</span>
+                    <button class="pl-btn" id="vb-mute" title="Звук"><svg viewBox="0 0 12 12"></svg></button>
+                    <input class="pl-range pl-vol vw-vol" id="vb-vol" type="range" min="0" max="100" value="80">
+                </div>
+                <div class="vw-controls">
+                    <button class="vw-btn" id="vw-prev" title="Попередній"></button>
+                    <button class="vw-btn" id="vw-full" title="На весь екран"></button>
+                    <button class="vw-btn" id="vw-next" title="Наступний"></button>
+                </div>
+                <div class="vw-info" id="vw-info"></div>
+            </div>
+        </aside>
+    </div>
+    <footer class="statusbar">
+        <span id="status-count">Елементів: 0</span>
+        <span id="status-selected" class="status-selected" hidden></span>
+        <span id="status-note" class="status-note" hidden></span>
+        <div class="trashbar" id="trashbar" hidden>
+            <button class="tb-btn" id="tb-select-all" type="button" title="Вибрати всі елементи">Вибрати все</button>
+            <button class="tb-btn" id="tb-restore" type="button" title="Відновити вибрані елементи">Відновити вибране</button>
+            <button class="tb-btn" id="tb-restore-all" type="button" title="Відновити всі елементи">Відновити все</button>
+            <button class="tb-btn danger" id="tb-empty" type="button" title="Остаточно видалити всі елементи">Очистити смітник</button>
+        </div>
+    </footer>
+    <div class="player" id="player">
+        <div class="pl-buttons">
+            <button class="pl-btn" id="pl-prev" title="Попередній"><svg viewBox="0 0 12 12"><path d="M2.5 2h1.6v8H2.5zM10 2.2v7.6L4.8 6z"/></svg></button>
+            <button class="pl-btn pl-play" id="pl-play" title="Відтворити"><svg viewBox="0 0 12 12"></svg></button>
+            <button class="pl-btn" id="pl-next" title="Наступний"><svg viewBox="0 0 12 12"><path d="M7.9 2h1.6v8H7.9zM2 2.2v7.6L7.2 6z"/></svg></button>
+        </div>
+        <div class="pl-info">
+            <div class="pl-title" id="pl-title">Нічого не відтворюється</div>
+            <div class="pl-sub" id="pl-sub">Двічі клікніть по музичному файлу</div>
+        </div>
+        <span class="pl-time" id="pl-cur">0:00</span>
+        <input class="pl-range pl-seek" id="pl-seek" type="range" min="0" max="1000" value="0">
+        <span class="pl-time" id="pl-dur">0:00</span>
+        <button class="pl-btn" id="pl-repeat" title="Повтор: вимкнено"><svg viewBox="0 0 12 12"></svg></button>
+        <button class="pl-btn" id="pl-shuffle" title="Перемішування: вимкнено"><svg viewBox="0 0 12 12"></svg></button>
+        <button class="pl-btn" id="pl-mute" title="Звук"><svg viewBox="0 0 12 12"></svg></button>
+        <input class="pl-range pl-vol" id="pl-vol" type="range" min="0" max="100" value="80">
+        <button class="pl-btn" id="pl-close" title="Зупинити"><svg viewBox="0 0 12 12"><path d="M3 3l6 6M9 3l-6 6" fill="none"/></svg></button>
+        <audio id="audio" preload="metadata"></audio>
+    </div>
+    <div class="jobs" id="jobs"></div>
+    <div class="modal-layer" id="modal-layer" hidden></div>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
