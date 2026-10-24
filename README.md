@@ -5,6 +5,7 @@
 ![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)
 ![Platform](https://img.shields.io/badge/Windows-основна%20платформа-0078D6?logo=windows&logoColor=white)
 ![Version](https://img.shields.io/badge/версія-1.0-c82d48)
+![Claude AI](https://img.shields.io/badge/Claude%20AI-D97757?logo=claude&logoColor=white)
 
 ---
 
